@@ -18,7 +18,7 @@ interface PopupNameProps {
 
 const PopupName: React.FC<PopupNameProps> = ({saveName}) => {
   const [name, setName] = React.useState<string>('');
-  const [joined, setJoined] = React.useState<boolean>(false);
+  const [joined, setJoined] = React.useState<boolean>(false);// стейт для кнопки первое что пришло в голову
 
   const onAddName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value)
@@ -26,11 +26,11 @@ const PopupName: React.FC<PopupNameProps> = ({saveName}) => {
 
   const onSaveName = () => {
     saveName(name);
-    setJoined(true);
+    setJoined(true); // установить true если кнопка нажата
   }
 
-  return (
-    <PopupContainer>
+  return (// потом в PopupContainer можно было бы передать пропс с joined и на основании его применять стиль, но в консоли почему-то ошибка
+    <PopupContainer> 
       <input
         type="text"
         placeholder='введите имя'
