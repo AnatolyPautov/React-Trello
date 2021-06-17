@@ -6,7 +6,6 @@ function App() {
 
   const saveName = (name: string) => {
     setState(name);
-    console.log(`имя пользователя: ${state}`)
   }
   return (
     <div className="App">
