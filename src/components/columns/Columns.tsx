@@ -10,15 +10,18 @@ const ColumnsContainer = styled.div`
   margin-top: 100px;
 `
 
-const Columns: React.FC = () => {
+interface ColumnsProps{
+  userName: string;
+}
+const Columns: React.FC<ColumnsProps> = ({userName}) => {
   
 
   return (
     <ColumnsContainer>
-      <Colomn colomnName='TODO'/>
-      <Colomn colomnName='In Progress'/>
-      <Colomn colomnName='Testing'/>
-      <Colomn colomnName='Done'/>
+      <Colomn colomnName='TODO' userName={userName}/>
+      <Colomn colomnName='In Progress' userName={userName}/>
+      <Colomn colomnName='Testing' userName={userName}/>
+      <Colomn colomnName='Done' userName={userName}/>
     </ColumnsContainer>
   );
 }

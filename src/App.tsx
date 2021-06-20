@@ -2,6 +2,7 @@ import React from 'react';
 import PopupName from './components/PopupName';
 import Columns from './components/columns/Columns';
 import styled from 'styled-components';
+import CardModal from './components/columns/CardModal'
 
 const Background = styled.div`
   position: absolute;
@@ -27,10 +28,12 @@ function App() {
   const saveName = (name: string) => {
     setUserName(name);
   }
+
   return (
     <Background>
       <Wrapper>
-        {!joined ? <PopupName saveName={saveName} setJoined={setJoined} /> : <Columns />}
+        {!joined ? <PopupName saveName={saveName} setJoined={setJoined} /> 
+        : <Columns userName={userName}/>}
       </Wrapper>
     </Background>
   );
