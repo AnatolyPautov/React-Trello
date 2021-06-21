@@ -55,6 +55,7 @@ const Column: React.FC<ColumnProps> = ({colomnName, userName}) => {
       const newItem = {
         id: Math.random().toString(36).substring(2,9),
         card: columnArea,
+        description: 'авпвапв',
       }
       setColumnCards([...columnCards, newItem]);
       setColumnArea('');

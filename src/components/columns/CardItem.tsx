@@ -47,7 +47,10 @@ const CardItem: React.FC<CardItemProps> = ({ item, removeCard, userName}) => {
         </span>
       </CloseСross>
       {modalActive && 
-      <CardModal setModalActive={setModalActive} userName={userName} item={item}/>}
+      <CardModal
+        setModalActive={setModalActive} 
+        userName={userName} 
+        item={item}/>}
     </Card>
   );
 }
