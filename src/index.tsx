@@ -3,11 +3,21 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import ThemeContext from './context'
 
+function Main() {
+  const [userName, setUserName] = React.useState<string>('');
+
+  return(
+    <ThemeContext.Provider value={{userName, setUserName}}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </ThemeContext.Provider>
+  )
+}
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Main/>,
   document.getElementById('root')
 );
 

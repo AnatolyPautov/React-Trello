@@ -35,10 +35,9 @@ const AreaInput = styled.input`
 
 interface ColumnProps {
   colomnName: string;
-  userName: string;
 }
 
-const Column: React.FC<ColumnProps> = ({colomnName, userName}) => {
+const Column: React.FC<ColumnProps> = ({colomnName}) => {
   const [columnTitle, setColumnTitle] = React.useState<string>(colomnName); 
   const [columnArea, setColumnArea] = React.useState<string>(''); 
   const [columnCards, setColumnCards] = React.useState<any>([]); 
@@ -56,6 +55,7 @@ const Column: React.FC<ColumnProps> = ({colomnName, userName}) => {
         id: Math.random().toString(36).substring(2,9),
         card: columnArea,
         description: 'авпвапв',
+        comments: [],
       }
       setColumnCards([...columnCards, newItem]);
       setColumnArea('');
@@ -82,8 +82,7 @@ const Column: React.FC<ColumnProps> = ({colomnName, userName}) => {
         <CardItem 
           removeCard={removeCard} 
           item={item} 
-          key={item.id}
-          userName={userName}/>)}
+          key={item.id}/>)}
       </ItemWrapper>
       <AreaInput
         value={columnArea}

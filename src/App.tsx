@@ -1,8 +1,7 @@
 import React from 'react';
 import PopupName from './components/PopupName';
-import Columns from './components/columns/Columns';
+import Board from './components/columns/Board';
 import styled from 'styled-components';
-import CardModal from './components/columns/CardModal'
 
 const Background = styled.div`
   position: absolute;
@@ -22,18 +21,13 @@ const Wrapper = styled.div`
 `
 
 function App() {
-  const [userName, setUserName] = React.useState<string>('');
   const [joined, setJoined] = React.useState<boolean>(false);
-
-  const saveName = (name: string) => {
-    setUserName(name);
-  }
 
   return (
     <Background>
       <Wrapper>
-        {!joined ? <PopupName saveName={saveName} setJoined={setJoined} /> 
-        : <Columns userName={userName}/>}
+        {!joined ? <PopupName setJoined={setJoined} /> 
+        : <Board/>}
       </Wrapper>
     </Background>
   );

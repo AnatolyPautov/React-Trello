@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
+import ThemeContext from '../context';
 
 const PopupContainer = styled.div`
   position: absolute;
@@ -44,21 +45,23 @@ const PopupBtn = styled.button`
 `
 
 interface PopupNameProps {
-  saveName(name: string): void
   setJoined(e: boolean): void
 }
 
-const PopupName: React.FC<PopupNameProps> = ({ saveName, setJoined }) => {
+const PopupName: React.FC<PopupNameProps> = ({ setJoined }) => {
   const [name, setName] = React.useState<string>('');
+
+  const {setUserName} = React.useContext(ThemeContext)
 
   const onAddName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value)
   }
 
   const onSaveName = () => {
-    saveName(name);
+    setUserName(name);
     setJoined(true);
   }
+
 
   return (
     <PopupContainer>
