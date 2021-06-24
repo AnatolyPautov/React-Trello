@@ -1,8 +1,14 @@
 import React from 'react';
+
 interface AppContextInterface {
     userName: string, 
     setUserName(name: string): void, 
 }
-const ThemeContext = React.createContext<AppContextInterface>({} as AppContextInterface);
+
+const contextDefaultValues: AppContextInterface = {
+    userName: '',
+    setUserName: () => {}
+  };
+const ThemeContext = React.createContext<AppContextInterface>(contextDefaultValues);
 
 export default ThemeContext;

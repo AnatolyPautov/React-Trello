@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import ThemeContext from '../../context';
 import { ReactSVG } from 'react-svg'
 import closeCross from './../../assets/icons/closeCross.svg'
+import * as Types from './../../types/types'
 
 const Background = styled.div`
   position: absolute;
@@ -65,71 +66,53 @@ const CommentArea = styled.input`
   box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
 `
 interface ModalProps {
-  item: any;
+  comments: Types.Comment[];
+  card: Types.Card;
   setModalActive(active: boolean): void;
+  onChangeCardTitle(e: React.ChangeEvent<HTMLInputElement>, id:string):void;
+  onChangeCardDesc(e: React.ChangeEvent<HTMLInputElement>, id:string):void;
+  addComment(commentInput: string): void;
 }
-const CardModal: React.FC<ModalProps> = ({setModalActive, item }) => {
-  const [itemText, setItemText] = React.useState(item.card);
-  const [descText, setDescText] = React.useState(item.dscription);
+const CardModal: React.FC<ModalProps> = ({...props}) => {
   const [commentInput, setCommentInput] = React.useState<string>('');
-  const [comments, setComments] = React.useState<any[]>(item.comments);
 
   const {userName} = React.useContext(ThemeContext);
 
   const onCloseModal = ({ key }: KeyboardEvent) => {
     if (key === 'Escape') {
-      setModalActive(false)
+      props.setModalActive(false)
     }
   }
   React.useEffect(() => {
     document.addEventListener('keydown', onCloseModal)
   })
-  
-  const onChangeItemCard = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setItemText(e.target.value);
-    item.card = itemText;
-  }
-  const onChangeDescText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDescText(e.target.value);
-    item.dscription = descText;
-  }
 
   const onChangeCommentInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCommentInput(e.target.value)
   }
-  const addCard = () => {
-    if(commentInput){
-      const newComment = {
-        id: Math.random().toString(36).substring(2,9),
-        comment: commentInput,
-      }
-      setComments([...comments, newComment]);
-      item.comments = comments;
-      setCommentInput('');
-    }
-  }
-  const keyPressHandler = (event: React.KeyboardEvent) => {
+
+  const keyPressHandler = (event: React.KeyboardEvent, commentInput: string) => {
     if(event.key === 'Enter') {
-      addCard();
+      props.addComment(commentInput);
     }
   }
   
   return (
-    <Background onClick={() => setModalActive(false)}>
+    <Background onClick={() =>  props.setModalActive(false)}>
       <ModalWrapper onClick={e => e.stopPropagation()}>
-        <CloseСross onClick={() => setModalActive(false)}>
+        <CloseСross onClick={() =>  props.setModalActive(false)}>
           <span>
             <ReactSVG src={closeCross}/>
           </span>
         </CloseСross>
         <TitleInput
-          onChange={onChangeItemCard}
-          value={itemText}
+          onChange={(e) =>  props.onChangeCardTitle(e,  props.card.id)}
+          value={ props.card.title}
           type="text" />
         Описание:
         <DescInput
-          onChange={onChangeDescText}
-          value={descText || ''}
+          onChange={(e) => props.onChangeCardDesc(e,  props.card.id)}
+          value={ props.card.description}
           type="text" 
           placeholder='Добавте более подробное описание...'/>
         <CommentArea
@@ -137,9 +120,10 @@ const CardModal: React.FC<ModalProps> = ({setModalActive, item }) => {
           type="text"
           placeholder='Введите комментарий'
           onChange={onChangeCommentInput}
-          onKeyPress={keyPressHandler}/>
-          {comments.map((com: any) => 
-          <div key={com.id}>{com.comment}{userName}</div>)}
+          onKeyPress={(e) => keyPressHandler(e, commentInput)}/>
+        { props.comments.map((com: any) => 
+          <div key={com.id}>{com.text}{userName}</div>
+        )} 
       </ModalWrapper>
     </Background>
   );

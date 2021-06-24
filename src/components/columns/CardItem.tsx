@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import CardModal from './CardModal'
 import { ReactSVG } from 'react-svg'
 import closeCross from './../../assets/icons/closeCross.svg'
+import * as Types from './../../types/types'
 
 const Card = styled.div`
   background-color: white;
@@ -27,16 +28,28 @@ const CloseСross = styled.div`
 `
 
 interface CardItemProps {
-  item: any;
+  card: Types.Card;
   removeCard(id: string | number): void;
+  onChangeCardTitle(e: React.ChangeEvent<HTMLInputElement>, id:string):void;
+  onChangeCardDesc(e: React.ChangeEvent<HTMLInputElement>, id:string):void;
 }
-const CardItem: React.FC<CardItemProps> = ({ item, removeCard}) => {
+const CardItem: React.FC<CardItemProps> = ({ card, removeCard, onChangeCardTitle, onChangeCardDesc}) => {
   const [modalActive, setModalActive] = React.useState(false);
+  const [comments, setComments] = React.useState<Types.Comment[]>([]);
 
+  const addComment = (commentInput: string) => {
+    if(commentInput){
+      const newComment = {
+        id: Math.random().toString(36).substring(2,9),
+        text: commentInput,
+      }
+      setComments([...comments, newComment]);
+    }
+  }
   return (
     <Card>
-      <CardDesc onClick={() => setModalActive(true)}>{item.card}</CardDesc>
-      <CloseСross onClick={() => removeCard(item.id)}>
+      <CardDesc onClick={() => setModalActive(true)}>{card.title}</CardDesc>
+      <CloseСross onClick={() => removeCard(card.id)}>
         <span>
           <ReactSVG src={closeCross}/>
         </span>
@@ -44,7 +57,13 @@ const CardItem: React.FC<CardItemProps> = ({ item, removeCard}) => {
       {modalActive && 
       <CardModal
         setModalActive={setModalActive} 
-        item={item}/>}
+        card={card}
+        onChangeCardTitle={onChangeCardTitle}
+        onChangeCardDesc={onChangeCardDesc}
+        addComment={addComment}
+        comments={comments}
+        />
+      }
     </Card>
   );
 }

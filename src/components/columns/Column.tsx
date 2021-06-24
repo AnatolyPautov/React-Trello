@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import CardItem from './CardItem'
+import * as Types from './../../types/types'
 
 const ColumnContainer = styled.div`
   display: flex;
@@ -34,30 +35,25 @@ const AreaInput = styled.input`
 `
 
 interface ColumnProps {
-  colomnName: string;
+  data: Types.Column;
+  setColumnTitle(e: React.ChangeEvent<HTMLInputElement>, id:number):void;
 }
 
-const Column: React.FC<ColumnProps> = ({colomnName}) => {
-  const [columnTitle, setColumnTitle] = React.useState<string>(colomnName); 
+const Column: React.FC<ColumnProps> = ({data, setColumnTitle}) => {
+  const [cards, setCards] = React.useState<Types.Card[]>([]); 
   const [columnArea, setColumnArea] = React.useState<string>(''); 
-  const [columnCards, setColumnCards] = React.useState<any>([]); 
-
-  const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setColumnTitle(e.target.value)
-  }
 
   const onChangeArea = (e: React.ChangeEvent<HTMLInputElement>) => {
     setColumnArea(e.target.value)
   }
   const addCard = () => {
     if(columnArea){
-      const newItem = {
+      const newCard = {
         id: Math.random().toString(36).substring(2,9),
-        card: columnArea,
-        description: 'авпвапв',
-        comments: [],
+        title: columnArea,
+        description: '',
       }
-      setColumnCards([...columnCards, newItem]);
+      setCards([...cards, newCard]);
       setColumnArea('');
     }
   }
@@ -67,22 +63,41 @@ const Column: React.FC<ColumnProps> = ({colomnName}) => {
     }
   }
   const removeCard = (id: string | number) => {
-    setColumnCards([...columnCards.filter((card: any) => card.id !== id)])
+    setCards([...cards.filter((card: Types.Card) => card.id !== id)])
+  }
+  const onChangeCardTitle = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const newCardTitle = cards.map((card) => {
+      if(card.id === id)  {
+        card.title = e.target.value;
+      } return card
+    })
+    setCards(newCardTitle)
+  }
+  const onChangeCardDesc = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const newCardDesc = cards.map((card) => {
+      if(card.id === id)  {
+        card.description = e.target.value;
+      } return card
+    })
+    setCards(newCardDesc)
   }
 
   return (
     <ColumnContainer>
       <TitleInput
-        value={columnTitle}
+        value={data.title}
         type="text"
-        onChange={onChangeTitle}
+        onChange={(e) => setColumnTitle(e, data.id)}
       />
       <ItemWrapper>
-        {columnCards.map((item: any) => 
+        {cards.map((card: Types.Card) => 
         <CardItem 
           removeCard={removeCard} 
-          item={item} 
-          key={item.id}/>)}
+          card={card} 
+          key={card.id}
+          onChangeCardTitle={onChangeCardTitle}
+          onChangeCardDesc={onChangeCardDesc}/>
+        )}
       </ItemWrapper>
       <AreaInput
         value={columnArea}
