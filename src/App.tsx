@@ -1,6 +1,6 @@
 import React from 'react';
-import PopupName from './components/PopupName';
-import Board from './components/columns/Board';
+import PopupName from './components/popupUserName/PopupName';
+import Board from './components/board/Board';
 import styled from 'styled-components';
 
 const Background = styled.div`
@@ -10,7 +10,6 @@ const Background = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #5c3bfe;
   display: flex;
   justify-content: center;
   algin-items: center;

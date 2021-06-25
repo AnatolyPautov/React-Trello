@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import ThemeContext from '../../context';
 import { ReactSVG } from 'react-svg'
 import closeCross from './../../assets/icons/closeCross.svg'
-import * as Types from './../../types/types'
+import * as Types from '../../types/types'
+import Comment from './../comment/Comment'
 
 const Background = styled.div`
   position: absolute;
@@ -20,14 +21,13 @@ const Background = styled.div`
 const ModalWrapper = styled.div`
   box-sizing: border-box;
   width: 800px;
-  height: 500px;
+  min-height: 500px;
   background-color: #ebecf0;
   border-radius: 10px;
   position: relative;
   padding: 15px;
   display: flex;
   flex-direction: column;
-  padding-right: 50px
 `
 const CloseСross = styled.div`
   position: absolute;
@@ -52,10 +52,21 @@ const TitleInput = styled.input`
   background: transparent;
   font-size: 18px;
   margin-bottom: 10px;
+  margin-right: 40px;
 `
-const DescInput = styled(TitleInput)`
-  margin-top: 10px;
+const DescInput = styled.textarea`
+  background-color: rgba(9,30,66,.08);
+  margin: 10px 0;
   font-size: 14px;
+  min-height: 50px;
+  resize: none;
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  &: focus{
+    outline: 2px solid #5c3bfe;
+  }
 `
 const CommentArea = styled.input`
   padding: 15px 10px;
@@ -66,12 +77,14 @@ const CommentArea = styled.input`
   box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
 `
 interface ModalProps {
-  comments: Types.Comment[];
   card: Types.Card;
-  setModalActive(active: boolean): void;
   onChangeCardTitle(e: React.ChangeEvent<HTMLInputElement>, id:string):void;
-  onChangeCardDesc(e: React.ChangeEvent<HTMLInputElement>, id:string):void;
+  onChangeCardDesc(e: React.ChangeEvent<HTMLTextAreaElement>, id: string):void;
+  setModalActive(active: boolean): void;
+  comments: Types.Comment[];
   addComment(commentInput: string): void;
+  onChangeComment(e: React.ChangeEvent<HTMLInputElement>, id:string):void;
+  removeComment(id: string):void
 }
 const CardModal: React.FC<ModalProps> = ({...props}) => {
   const [commentInput, setCommentInput] = React.useState<string>('');
@@ -94,6 +107,7 @@ const CardModal: React.FC<ModalProps> = ({...props}) => {
   const keyPressHandler = (event: React.KeyboardEvent, commentInput: string) => {
     if(event.key === 'Enter') {
       props.addComment(commentInput);
+      setCommentInput('');
     }
   }
   
@@ -110,10 +124,9 @@ const CardModal: React.FC<ModalProps> = ({...props}) => {
           value={ props.card.title}
           type="text" />
         Описание:
-        <DescInput
+        <DescInput 
           onChange={(e) => props.onChangeCardDesc(e,  props.card.id)}
           value={ props.card.description}
-          type="text" 
           placeholder='Добавте более подробное описание...'/>
         <CommentArea
           value={commentInput}
@@ -121,8 +134,13 @@ const CardModal: React.FC<ModalProps> = ({...props}) => {
           placeholder='Введите комментарий'
           onChange={onChangeCommentInput}
           onKeyPress={(e) => keyPressHandler(e, commentInput)}/>
-        { props.comments.map((com: any) => 
-          <div key={com.id}>{com.text}{userName}</div>
+        { props.comments.map((comment: Types.Comment) => 
+          <Comment 
+            key={comment.id} 
+            onChangeComment={props.onChangeComment} 
+            removeComment={props.removeComment} 
+            comment={comment} 
+            userName={userName} />
         )} 
       </ModalWrapper>
     </Background>

@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ThemeContext from './context'
+import GlobalStyle from './globalstyles'
 
 function Main() {
   const [userName, setUserName] = React.useState<string>('');
@@ -11,6 +12,7 @@ function Main() {
   return(
     <ThemeContext.Provider value={{userName, setUserName}}>
       <React.StrictMode>
+        <GlobalStyle/>
         <App />
       </React.StrictMode>
     </ThemeContext.Provider>

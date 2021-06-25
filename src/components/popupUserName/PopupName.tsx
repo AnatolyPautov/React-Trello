@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
-import ThemeContext from '../context';
+import ThemeContext from '../../context';
 
 const PopupContainer = styled.div`
   position: absolute;

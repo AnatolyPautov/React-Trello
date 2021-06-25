@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
-import Column from './Column';
-import * as Types from './../../types/types'
+import Column from '../column/Column';
+import * as Types from '../../types/types'
 
 
 const BoardContainer = styled.div`

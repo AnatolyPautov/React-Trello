@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
-import CardItem from './CardItem'
-import * as Types from './../../types/types'
+import CardItem from '../card/CardItem'
+import * as Types from '../../types/types'
 
 const ColumnContainer = styled.div`
   display: flex;
@@ -62,7 +62,7 @@ const Column: React.FC<ColumnProps> = ({data, setColumnTitle}) => {
       addCard();
     }
   }
-  const removeCard = (id: string | number) => {
+  const removeCard = (id: string) => {
     setCards([...cards.filter((card: Types.Card) => card.id !== id)])
   }
   const onChangeCardTitle = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
@@ -73,7 +73,7 @@ const Column: React.FC<ColumnProps> = ({data, setColumnTitle}) => {
     })
     setCards(newCardTitle)
   }
-  const onChangeCardDesc = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+  const onChangeCardDesc = (e: React.ChangeEvent<HTMLTextAreaElement>, id: string) => {
     const newCardDesc = cards.map((card) => {
       if(card.id === id)  {
         card.description = e.target.value;

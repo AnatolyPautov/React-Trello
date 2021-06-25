@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components'
-import CardModal from './CardModal'
+import CardModal from '../modal/CardModal'
 import { ReactSVG } from 'react-svg'
 import closeCross from './../../assets/icons/closeCross.svg'
-import * as Types from './../../types/types'
+import * as Types from '../../types/types'
 
 const Card = styled.div`
   background-color: white;
@@ -31,12 +31,20 @@ interface CardItemProps {
   card: Types.Card;
   removeCard(id: string | number): void;
   onChangeCardTitle(e: React.ChangeEvent<HTMLInputElement>, id:string):void;
-  onChangeCardDesc(e: React.ChangeEvent<HTMLInputElement>, id:string):void;
+  onChangeCardDesc(e: React.ChangeEvent<HTMLTextAreaElement>, id: string):void;
 }
 const CardItem: React.FC<CardItemProps> = ({ card, removeCard, onChangeCardTitle, onChangeCardDesc}) => {
   const [modalActive, setModalActive] = React.useState(false);
   const [comments, setComments] = React.useState<Types.Comment[]>([]);
 
+  const onChangeComment= (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const newComment = comments.map((comment) => {
+      if(comment.id === id)  {
+        comment.text = e.target.value;
+      } return comment
+    })
+    setComments(newComment)
+  }
   const addComment = (commentInput: string) => {
     if(commentInput){
       const newComment = {
@@ -45,6 +53,9 @@ const CardItem: React.FC<CardItemProps> = ({ card, removeCard, onChangeCardTitle
       }
       setComments([...comments, newComment]);
     }
+  }
+  const removeComment= (id: string) => {
+    setComments([...comments.filter((comment: Types.Comment) => comment.id !== id)])
   }
   return (
     <Card>
@@ -62,6 +73,8 @@ const CardItem: React.FC<CardItemProps> = ({ card, removeCard, onChangeCardTitle
         onChangeCardDesc={onChangeCardDesc}
         addComment={addComment}
         comments={comments}
+        onChangeComment={onChangeComment}
+        removeComment={removeComment}
         />
       }
     </Card>
