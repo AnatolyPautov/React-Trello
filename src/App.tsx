@@ -13,11 +13,11 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   algin-items: center;
-`
+`;
 const Wrapper = styled.div`
   width: 1300px;
   margin: 0 auto;
-`
+`;
 
 function App() {
   const [joined, setJoined] = React.useState<boolean>(false);
@@ -25,8 +25,7 @@ function App() {
   return (
     <Background>
       <Wrapper>
-        {!joined ? <PopupName setJoined={setJoined} /> 
-        : <Board/>}
+        {!joined ? <PopupName setJoined={setJoined} /> : <Board />}
       </Wrapper>
     </Background>
   );
