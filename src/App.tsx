@@ -2,6 +2,7 @@ import React from 'react';
 import PopupName from './components/popupUserName/PopupName';
 import Board from './components/board/Board';
 import styled from 'styled-components';
+import GlobalStyle from './globalstyles';
 
 const Background = styled.div`
   position: absolute;
@@ -13,22 +14,24 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   algin-items: center;
-`
+`;
 const Wrapper = styled.div`
   width: 1300px;
   margin: 0 auto;
-`
+`;
 
 function App() {
   const [joined, setJoined] = React.useState<boolean>(false);
 
   return (
-    <Background>
-      <Wrapper>
-        {!joined ? <PopupName setJoined={setJoined} /> 
-        : <Board/>}
-      </Wrapper>
-    </Background>
+    <>
+      <GlobalStyle />
+      <Background>
+        <Wrapper>
+          {!joined ? <PopupName setJoined={setJoined} /> : <Board />}
+        </Wrapper>
+      </Background>
+    </>
   );
 }
 

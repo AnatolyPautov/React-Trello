@@ -1,14 +1,13 @@
-
 export type Column = {
-    id: number;
-    title: string;
-} 
+  id: number;
+  title: string;
+};
 export type Card = {
-    id: string;
-    title: string,
-    description: string,
-} 
+  id: string;
+  title: string;
+  description: string;
+};
 export type Comment = {
-    id: string;
-    text: string,
-} 
+  id: string;
+  text: string;
+};

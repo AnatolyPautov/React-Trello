@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components';
 import ThemeContext from '../../context';
 
 const PopupContainer = styled.div`
@@ -14,7 +14,7 @@ const PopupContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-`
+`;
 const PopupInput = styled.input`
   margin: 50px auto 30px;
   width: 250px;
@@ -25,7 +25,7 @@ const PopupInput = styled.input`
   font-size: 20px;
   text-align: center;
   border: 2px solid #5c3bfe;
-`
+`;
 const PopupBtn = styled.button`
   margin: 10px auto 0;
   width: 250px;
@@ -39,40 +39,35 @@ const PopupBtn = styled.button`
   background-color: #5c3bfe;
   color: white;
   transition: 0.3s;
-  &: hover{
+  &: hover {
     background-color: #2a4ab3;
   }
-`
+`;
 
 interface PopupNameProps {
-  setJoined(e: boolean): void
+  setJoined(e: boolean): void;
 }
 
 const PopupName: React.FC<PopupNameProps> = ({ setJoined }) => {
   const [name, setName] = React.useState<string>('');
 
-  const {setUserName} = React.useContext(ThemeContext)
+  const { setUserName } = React.useContext(ThemeContext);
 
   const onAddName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value)
-  }
+    setName(e.target.value);
+  };
 
   const onSaveName = () => {
     setUserName(name);
     setJoined(true);
-  }
-
+  };
 
   return (
     <PopupContainer>
-      <PopupInput
-        type="text"
-        placeholder='Введите имя'
-        onChange={onAddName}
-      />
+      <PopupInput type="text" placeholder="Введите имя" onChange={onAddName} />
       <PopupBtn onClick={onSaveName}>Сохранить</PopupBtn>
     </PopupContainer>
   );
-}
+};
 
 export default PopupName;
