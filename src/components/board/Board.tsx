@@ -5,7 +5,7 @@ import * as Types from '../../types/types';
 
 const BoardContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: 20px;
   align-items: flex-start;
   margin-top: 100px;
 `;
@@ -23,18 +23,19 @@ const Board: React.FC = () => {
     id: number
   ) => {
     const newColumn = columns.map((column) => {
-      if (column.id === id) {
-        column.title = e.target.value;
-      }
+      if (column.id === id) return { ...column, title: e.target.value };
       return column;
     });
-    console.log(newColumn);
     setColumns(newColumn);
   };
   return (
     <BoardContainer>
       {columns.map((column) => (
-        <Column key={column.id} data={column} setColumnTitle={setColumnTitle} />
+        <Column
+          key={column.id}
+          column={column}
+          setColumnTitle={setColumnTitle}
+        />
       ))}
     </BoardContainer>
   );

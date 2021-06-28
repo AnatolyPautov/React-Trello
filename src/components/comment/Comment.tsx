@@ -7,7 +7,7 @@ const Container = styled.div`
   margin-bottom: 10px;
 `;
 const FirstNameLetter = styled.div`
-  background-color: #e11cf0;
+  background-color: rgba(0, 0, 0, 0.15);
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -15,8 +15,14 @@ const FirstNameLetter = styled.div`
   justify-content: center;
   align-items: center;
   margin-right: 5px;
+  line-height: 0;
+  cursor: default;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
 `;
 const Text = styled.input`
+  width: 100%;
   margin-top: 5px;
   background-color: white;
   border-radius: 5px;

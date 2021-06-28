@@ -19,6 +19,7 @@ const Background = styled.div`
   align-items: center;
   overflow: hidden;
   overflow-y: auto;
+  z-index: 99;
 `;
 const ModalWrapper = styled.div`
   flex-shrink: 0;
@@ -63,11 +64,24 @@ const CloseСross = styled.div`
   }
 `;
 const TitleInput = styled.input`
-  border: none;
+  padding: 5px 5px;
   background: transparent;
   font-size: 18px;
-  margin-bottom: 10px;
   margin-right: 40px;
+  outline: none;
+  border-radius: 3px;
+  border: 2px solid transparent;
+  &:focus {
+    background: white;
+    border: 2px solid #5c3bfe;
+  }
+`;
+const TitleDesc = styled.div`
+  margin: 0 40px 10px 11px;
+  color: #172b4d;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
 `;
 const DescInput = styled.textarea`
   background-color: rgba(9, 30, 66, 0.08);
@@ -75,12 +89,13 @@ const DescInput = styled.textarea`
   font-size: 14px;
   min-height: 50px;
   resize: none;
-  border: none;
+  border: 2px solid transparent;
   outline: none;
   border-radius: 3px;
   padding: 5px 10px;
   &: focus {
-    outline: 2px solid #5c3bfe;
+    border: 2px solid #5c3bfe;
+    background: white;
   }
 `;
 const CommentArea = styled.input`
@@ -92,6 +107,8 @@ const CommentArea = styled.input`
   box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
 `;
 interface ModalProps {
+  textRef: any;
+  column: Types.Column;
   card: Types.Card;
   onChangeCardTitle(e: React.ChangeEvent<HTMLInputElement>, id: string): void;
   onChangeCardDesc(e: React.ChangeEvent<HTMLTextAreaElement>, id: string): void;
@@ -143,8 +160,13 @@ const CardModal: React.FC<ModalProps> = ({ ...props }) => {
             value={props.card.title}
             type="text"
           />
+          <TitleDesc>
+            <div> в колонке {props.column.title}</div>
+            <div>Автор: {userName}</div>
+          </TitleDesc>
           Описание:
           <DescInput
+            ref={props.textRef}
             onChange={(e) => props.onChangeCardDesc(e, props.card.id)}
             value={props.card.description}
             placeholder="Добавте более подробное описание..."

@@ -23,9 +23,9 @@ const TitleInput = styled.input`
 `;
 const ItemWrapper = styled.div`
   overflow-y: auto;
-  padding-right: 4px;
 `;
 const AreaInput = styled.input`
+  box-sizing: border-box;
   padding: 15px 10px;
   margin-bottom: 5px;
   border-radius: 3px;
@@ -35,13 +35,14 @@ const AreaInput = styled.input`
 `;
 
 interface ColumnProps {
-  data: Types.Column;
+  column: Types.Column;
   setColumnTitle(e: React.ChangeEvent<HTMLInputElement>, id: number): void;
 }
 
-const Column: React.FC<ColumnProps> = ({ data, setColumnTitle }) => {
+const Column: React.FC<ColumnProps> = ({ column, setColumnTitle }) => {
   const [cards, setCards] = React.useState<Types.Card[]>([]);
   const [columnArea, setColumnArea] = React.useState<string>('');
+  const textRef = React.useRef<any>();
 
   const onChangeArea = (e: React.ChangeEvent<HTMLInputElement>) => {
     setColumnArea(e.target.value);
@@ -70,9 +71,7 @@ const Column: React.FC<ColumnProps> = ({ data, setColumnTitle }) => {
     id: string
   ) => {
     const newCardTitle = cards.map((card) => {
-      if (card.id === id) {
-        card.title = e.target.value;
-      }
+      if (card.id === id) return { ...card, title: e.target.value };
       return card;
     });
     setCards(newCardTitle);
@@ -82,29 +81,32 @@ const Column: React.FC<ColumnProps> = ({ data, setColumnTitle }) => {
     id: string
   ) => {
     const newCardDesc = cards.map((card) => {
-      if (card.id === id) {
-        card.description = e.target.value;
-      }
+      if (card.id === id) return { ...card, description: e.target.value };
       return card;
     });
     setCards(newCardDesc);
+    console.log(textRef);
+    textRef.current.style.height = '0px';
+    textRef.current.style.height = `${textRef.current.scrollHeight}px`;
   };
 
   return (
     <ColumnContainer>
       <TitleInput
-        value={data.title}
+        value={column.title}
         type="text"
-        onChange={(e) => setColumnTitle(e, data.id)}
+        onChange={(e) => setColumnTitle(e, column.id)}
       />
       <ItemWrapper>
         {cards.map((card: Types.Card) => (
           <CardItem
             removeCard={removeCard}
+            column={column}
             card={card}
             key={card.id}
             onChangeCardTitle={onChangeCardTitle}
             onChangeCardDesc={onChangeCardDesc}
+            textRef={textRef}
           />
         ))}
       </ItemWrapper>
