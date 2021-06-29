@@ -3,12 +3,6 @@ import styled from 'styled-components';
 import Column from '../column/Column';
 import * as Types from '../../types/types';
 
-const BoardContainer = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  margin-top: 100px;
-`;
 const initColumns: Types.Column[] = [
   { id: 1, title: 'TO DO' },
   { id: 2, title: 'In Progress' },
@@ -22,12 +16,13 @@ const Board: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     id: number
   ) => {
-    const newColumn = columns.map((column) => {
+    const newTitle = columns.map((column) => {
       if (column.id === id) return { ...column, title: e.target.value };
       return column;
     });
-    setColumns(newColumn);
+    setColumns(newTitle);
   };
+
   return (
     <BoardContainer>
       {columns.map((column) => (
@@ -40,5 +35,12 @@ const Board: React.FC = () => {
     </BoardContainer>
   );
 };
+
+const BoardContainer = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 100px;
+`;
 
 export default Board;

@@ -2,6 +2,38 @@ import React from 'react';
 import styled from 'styled-components';
 import * as Types from '../../types/types';
 
+interface CommentProps {
+  userName: string;
+  comment: Types.Comment;
+  onChangeComment(e: React.ChangeEvent<HTMLInputElement>, id: string): void;
+  removeComment(e: string): void;
+}
+const Comment: React.FC<CommentProps> = ({
+  userName,
+  comment,
+  onChangeComment,
+  removeComment,
+}) => {
+  return (
+    <Container>
+      <FirstNameLetter>
+        <div>{userName[0]}</div>
+      </FirstNameLetter>
+      <div>
+        <div>{userName}</div>
+        <Text
+          type="text"
+          value={comment.text}
+          onChange={(e) => onChangeComment(e, comment.id)}
+        />
+        <div>
+          <Delete onClick={() => removeComment(comment.id)}>Удалить</Delete>
+        </div>
+      </div>
+    </Container>
+  );
+};
+
 const Container = styled.div`
   display: flex;
   margin-bottom: 10px;
@@ -40,37 +72,5 @@ const Delete = styled.button`
     color: #262930;
   }
 `;
-
-interface CommentProps {
-  userName: string;
-  comment: Types.Comment;
-  onChangeComment(e: React.ChangeEvent<HTMLInputElement>, id: string): void;
-  removeComment(e: string): void;
-}
-const Comment: React.FC<CommentProps> = ({
-  userName,
-  comment,
-  onChangeComment,
-  removeComment,
-}) => {
-  return (
-    <Container>
-      <FirstNameLetter>
-        <div>{userName[0]}</div>
-      </FirstNameLetter>
-      <div>
-        <div>{userName}</div>
-        <Text
-          type="text"
-          value={comment.text}
-          onChange={(e) => onChangeComment(e, comment.id)}
-        />
-        <div>
-          <Delete onClick={() => removeComment(comment.id)}>Удалить</Delete>
-        </div>
-      </div>
-    </Container>
-  );
-};
 
 export default Comment;

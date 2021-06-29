@@ -6,6 +6,105 @@ import closeCross from './../../assets/icons/closeCross.svg';
 import * as Types from '../../types/types';
 import Comment from './../comment/Comment';
 
+interface ModalProps {
+  column: Types.Column;
+  card: Types.Card;
+  onChangeCard(
+    id: string,
+    filedName: string
+  ): (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => void;
+  setModalActive(active: boolean): void;
+  comments: Types.Comment[];
+  addComment(commentInput: string): void;
+  onChangeComment(e: React.ChangeEvent<HTMLInputElement>, id: string): void;
+  removeComment(id: string): void;
+}
+const CardModal: React.FC<ModalProps> = (props) => {
+  const [commentInput, setCommentInput] = React.useState<string>('');
+
+  const textRef = React.useRef<any>();
+
+  const { userName } = React.useContext(Context);
+
+  const onCloseModal = ({ key }: KeyboardEvent) => {
+    if (key === 'Escape') {
+      props.setModalActive(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener('keydown', onCloseModal);
+  });
+
+  const onChangeCommentInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCommentInput(e.target.value);
+  };
+
+  const keyPressHandler = (
+    event: React.KeyboardEvent,
+    commentInput: string
+  ) => {
+    if (event.key === 'Enter') {
+      props.addComment(commentInput);
+      setCommentInput('');
+    }
+  };
+
+  return (
+    <Background onClick={() => props.setModalActive(false)}>
+      <ModalWrapper>
+        <Modal onClick={(e) => e.stopPropagation()}>
+          <CloseСross onClick={() => props.setModalActive(false)}>
+            <span>
+              <ReactSVG src={closeCross} />
+            </span>
+          </CloseСross>
+          <TitleInput
+            onChange={props.onChangeCard(props.card.id, 'title')}
+            value={props.card.title}
+            type="text"
+          />
+          <TitleDesc>
+            <div> в колонке {props.column.title}</div>
+            <div>Автор: {userName}</div>
+          </TitleDesc>
+          Описание:
+          <DescInput
+            ref={textRef}
+            onChange={(e) => {
+              props.onChangeCard(props.card.id, 'description')(e);
+              textRef.current.style.height = '0px';
+              textRef.current.style.height = `${textRef.current.scrollHeight}px`;
+            }}
+            value={props.card.description}
+            placeholder="Добавте более подробное описание..."
+          />
+          <CommentArea
+            value={commentInput}
+            type="text"
+            placeholder="Введите комментарий"
+            onChange={onChangeCommentInput}
+            onKeyPress={(e) => keyPressHandler(e, commentInput)}
+          />
+          {props.comments.map((comment: Types.Comment) => (
+            <Comment
+              key={comment.id}
+              onChangeComment={props.onChangeComment}
+              removeComment={props.removeComment}
+              comment={comment}
+              userName={userName}
+            />
+          ))}
+        </Modal>
+      </ModalWrapper>
+    </Background>
+  );
+};
+
 const Background = styled.div`
   position: fixed;
   content: '';
@@ -106,91 +205,5 @@ const CommentArea = styled.input`
   border: none;
   box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
 `;
-interface ModalProps {
-  textRef: any;
-  column: Types.Column;
-  card: Types.Card;
-  onChangeCardTitle(e: React.ChangeEvent<HTMLInputElement>, id: string): void;
-  onChangeCardDesc(e: React.ChangeEvent<HTMLTextAreaElement>, id: string): void;
-  setModalActive(active: boolean): void;
-  comments: Types.Comment[];
-  addComment(commentInput: string): void;
-  onChangeComment(e: React.ChangeEvent<HTMLInputElement>, id: string): void;
-  removeComment(id: string): void;
-}
-const CardModal: React.FC<ModalProps> = ({ ...props }) => {
-  const [commentInput, setCommentInput] = React.useState<string>('');
-
-  const { userName } = React.useContext(Context);
-
-  const onCloseModal = ({ key }: KeyboardEvent) => {
-    if (key === 'Escape') {
-      props.setModalActive(false);
-    }
-  };
-  React.useEffect(() => {
-    document.addEventListener('keydown', onCloseModal);
-  });
-
-  const onChangeCommentInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCommentInput(e.target.value);
-  };
-
-  const keyPressHandler = (
-    event: React.KeyboardEvent,
-    commentInput: string
-  ) => {
-    if (event.key === 'Enter') {
-      props.addComment(commentInput);
-      setCommentInput('');
-    }
-  };
-
-  return (
-    <Background onClick={() => props.setModalActive(false)}>
-      <ModalWrapper>
-        <Modal onClick={(e) => e.stopPropagation()}>
-          <CloseСross onClick={() => props.setModalActive(false)}>
-            <span>
-              <ReactSVG src={closeCross} />
-            </span>
-          </CloseСross>
-          <TitleInput
-            onChange={(e) => props.onChangeCardTitle(e, props.card.id)}
-            value={props.card.title}
-            type="text"
-          />
-          <TitleDesc>
-            <div> в колонке {props.column.title}</div>
-            <div>Автор: {userName}</div>
-          </TitleDesc>
-          Описание:
-          <DescInput
-            ref={props.textRef}
-            onChange={(e) => props.onChangeCardDesc(e, props.card.id)}
-            value={props.card.description}
-            placeholder="Добавте более подробное описание..."
-          />
-          <CommentArea
-            value={commentInput}
-            type="text"
-            placeholder="Введите комментарий"
-            onChange={onChangeCommentInput}
-            onKeyPress={(e) => keyPressHandler(e, commentInput)}
-          />
-          {props.comments.map((comment: Types.Comment) => (
-            <Comment
-              key={comment.id}
-              onChangeComment={props.onChangeComment}
-              removeComment={props.removeComment}
-              comment={comment}
-              userName={userName}
-            />
-          ))}
-        </Modal>
-      </ModalWrapper>
-    </Background>
-  );
-};
 
 export default CardModal;

@@ -6,6 +6,85 @@ import closeCross from './../../assets/icons/closeCross.svg';
 import commentIcon from './../../assets/icons/comment.svg';
 import * as Types from '../../types/types';
 
+interface CardItemProps {
+  column: Types.Column;
+  card: Types.Card;
+  removeCard(id: string | number): void;
+  onChangeCard(
+    id: string,
+    filedName: string
+  ): (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => void;
+}
+const CardItem: React.FC<CardItemProps> = ({
+  column,
+  card,
+  removeCard,
+  onChangeCard,
+}) => {
+  const [modalActive, setModalActive] = React.useState(false);
+  const [comments, setComments] = React.useState<Types.Comment[]>([]);
+
+  const onChangeComment = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string
+  ) => {
+    const changedComments = comments.map((comment) => {
+      if (comment.id === id) return { ...comment, text: e.target.value };
+      return comment;
+    });
+    setComments(changedComments);
+  };
+
+  const addComment = (commentInput: string) => {
+    if (commentInput) {
+      const newComment = {
+        id: Math.random().toString(36).substring(2, 9),
+        text: commentInput,
+      };
+      setComments([...comments, newComment]);
+    }
+  };
+
+  const removeComment = (id: string) => {
+    setComments(comments.filter((comment: Types.Comment) => comment.id !== id));
+  };
+
+  return (
+    <>
+      <Card onClick={() => setModalActive(true)}>
+        <CardDesc>{card.title}</CardDesc>
+        {comments.length > 0 && (
+          <IconContainer title="Коментарии">
+            <ReactSVG src={commentIcon} />
+            <span>{comments.length}</span>
+          </IconContainer>
+        )}
+        <CloseСross onClick={() => removeCard(card.id)}>
+          <span>
+            <ReactSVG src={closeCross} />
+          </span>
+        </CloseСross>
+      </Card>
+      {modalActive && (
+        <CardModal
+          column={column}
+          setModalActive={setModalActive}
+          card={card}
+          onChangeCard={onChangeCard}
+          addComment={addComment}
+          comments={comments}
+          onChangeComment={onChangeComment}
+          removeComment={removeComment}
+        />
+      )}
+    </>
+  );
+};
+
 const Card = styled.div`
   cursor: pointer;
   position: relative;
@@ -44,80 +123,5 @@ const IconContainer = styled.div`
     font-size: 14px;
   }
 `;
-
-interface CardItemProps {
-  textRef: any;
-  column: Types.Column;
-  card: Types.Card;
-  removeCard(id: string | number): void;
-  onChangeCardTitle(e: React.ChangeEvent<HTMLInputElement>, id: string): void;
-  onChangeCardDesc(e: React.ChangeEvent<HTMLTextAreaElement>, id: string): void;
-}
-const CardItem: React.FC<CardItemProps> = ({
-  textRef,
-  column,
-  card,
-  removeCard,
-  onChangeCardTitle,
-  onChangeCardDesc,
-}) => {
-  const [modalActive, setModalActive] = React.useState(false);
-  const [comments, setComments] = React.useState<Types.Comment[]>([]);
-
-  const onChangeComment = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    id: string
-  ) => {
-    const changedComments = comments.map((comment) => {
-      if (comment.id === id) return { ...comment, text: e.target.value };
-      return comment;
-    });
-    setComments(changedComments);
-  };
-  const addComment = (commentInput: string) => {
-    if (commentInput) {
-      const newComment = {
-        id: Math.random().toString(36).substring(2, 9),
-        text: commentInput,
-      };
-      setComments([...comments, newComment]);
-    }
-  };
-  const removeComment = (id: string) => {
-    setComments(comments.filter((comment: Types.Comment) => comment.id !== id));
-  };
-  return (
-    <>
-      <Card onClick={() => setModalActive(true)}>
-        <CardDesc>{card.title}</CardDesc>
-        {comments.length > 0 && (
-          <IconContainer title="Коментарии">
-            <ReactSVG src={commentIcon} />
-            <span>{comments.length}</span>
-          </IconContainer>
-        )}
-        <CloseСross onClick={() => removeCard(card.id)}>
-          <span>
-            <ReactSVG src={closeCross} />
-          </span>
-        </CloseСross>
-      </Card>
-      {modalActive && (
-        <CardModal
-          textRef={textRef}
-          column={column}
-          setModalActive={setModalActive}
-          card={card}
-          onChangeCardTitle={onChangeCardTitle}
-          onChangeCardDesc={onChangeCardDesc}
-          addComment={addComment}
-          comments={comments}
-          onChangeComment={onChangeComment}
-          removeComment={removeComment}
-        />
-      )}
-    </>
-  );
-};
 
 export default CardItem;

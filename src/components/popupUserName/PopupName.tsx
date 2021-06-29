@@ -2,6 +2,34 @@ import React from 'react';
 import styled from 'styled-components';
 import ThemeContext from '../../context';
 
+interface PopupNameProps {
+  setJoined(e: boolean): void;
+}
+
+const PopupName: React.FC<PopupNameProps> = ({ setJoined }) => {
+  const [name, setName] = React.useState<string>('');
+
+  const { setUserName } = React.useContext(ThemeContext);
+
+  const onAddName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const onSaveName = () => {
+    if (name) {
+      setUserName(name);
+      setJoined(true);
+    }
+  };
+
+  return (
+    <PopupContainer>
+      <PopupInput type="text" placeholder="Введите имя" onChange={onAddName} />
+      <PopupBtn onClick={onSaveName}>Сохранить</PopupBtn>
+    </PopupContainer>
+  );
+};
+
 const PopupContainer = styled.div`
   position: absolute;
   content: '';
@@ -43,31 +71,5 @@ const PopupBtn = styled.button`
     background-color: #2a4ab3;
   }
 `;
-
-interface PopupNameProps {
-  setJoined(e: boolean): void;
-}
-
-const PopupName: React.FC<PopupNameProps> = ({ setJoined }) => {
-  const [name, setName] = React.useState<string>('');
-
-  const { setUserName } = React.useContext(ThemeContext);
-
-  const onAddName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  const onSaveName = () => {
-    setUserName(name);
-    setJoined(true);
-  };
-
-  return (
-    <PopupContainer>
-      <PopupInput type="text" placeholder="Введите имя" onChange={onAddName} />
-      <PopupBtn onClick={onSaveName}>Сохранить</PopupBtn>
-    </PopupContainer>
-  );
-};
 
 export default PopupName;
