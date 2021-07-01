@@ -2,82 +2,74 @@ import React from 'react';
 import styled from 'styled-components';
 import CardItem from '../card/CardItem';
 import * as Types from '../../types/types';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addCard,
+  updateNewCard,
+  setColumnTitle,
+  selectCards,
+} from '../../store/store';
 
 interface ColumnProps {
   column: Types.Column;
-  setColumnTitle(e: React.ChangeEvent<HTMLInputElement>, id: number): void;
 }
 
-const Column: React.FC<ColumnProps> = ({ column, setColumnTitle }) => {
-  const [cards, setCards] = React.useState<Types.Card[]>([]);
-  const [columnArea, setColumnArea] = React.useState<string>('');
-
-  const onChangeArea = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setColumnArea(e.target.value);
-  };
-
-  const addCard = () => {
-    if (columnArea) {
-      const newCard = {
-        id: Math.random().toString(36).substring(2, 9),
-        title: columnArea,
-        description: '',
-      };
-      setCards([...cards, newCard]);
-      setColumnArea('');
-    }
-  };
+const Column: React.FC<ColumnProps> = ({ column }) => {
+  const cards = useSelector(selectCards);
+  const dispatch = useDispatch();
 
   const keyPressHandler = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      addCard();
+    if (event.key === 'Enter' && column.newTextCard) {
+      dispatch(
+        addCard({
+          newTextCard: column.newTextCard,
+          columnId: column.id,
+        })
+      );
     }
   };
-
-  const removeCard = (id: string) => {
-    setCards([...cards.filter((card: Types.Card) => card.id !== id)]);
-  };
-
-  const onChangeCard =
-    (id: string, filedName: string) =>
-    (
-      e:
-        | React.ChangeEvent<HTMLInputElement>
-        | React.ChangeEvent<HTMLTextAreaElement>
-    ) => {
-      const changedCard = cards.map((card) => {
-        if (card.id === id) return { ...card, [filedName]: e.target.value };
-        return card;
-      });
-      setCards(changedCard);
-    };
 
   return (
     <ColumnContainer>
       <TitleInput
         value={column.title}
         type="text"
-        onChange={(e) => setColumnTitle(e, column.id)}
+        onChange={(e) =>
+          dispatch(setColumnTitle({ event: e.target.value, id: column.id }))
+        }
       />
       <CardsWrapper>
-        {cards.map((card: Types.Card) => (
-          <CardItem
-            removeCard={removeCard}
-            column={column}
-            card={card}
-            key={card.id}
-            onChangeCard={onChangeCard}
-          />
-        ))}
+        {cards.map(
+          (card: Types.Card) =>
+            card.columnId === column.id && (
+              <CardItem column={column} card={card} key={card.id} />
+            )
+        )}
       </CardsWrapper>
       <AreaInput
-        value={columnArea}
+        value={column.newTextCard}
         type="text"
         placeholder="Введите текст"
-        onChange={onChangeArea}
+        onChange={(e) =>
+          dispatch(updateNewCard({ event: e.target.value, id: column.id }))
+        }
         onKeyPress={keyPressHandler}
       />
-      <button onClick={addCard}>Добавить карточку</button>
+      <button
+        onClick={
+          column.newTextCard
+            ? () =>
+                dispatch(
+                  addCard({
+                    newTextCard: column.newTextCard,
+                    columnId: column.id,
+                  })
+                )
+            : undefined
+        }
+      >
+        Добавить карточку
+      </button>
     </ColumnContainer>
   );
 };

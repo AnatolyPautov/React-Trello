@@ -1,19 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import * as Types from '../../types/types';
+import { removeComment, onChangeComment } from '../../store/store';
+import { useDispatch } from 'react-redux';
 
 interface CommentProps {
   userName: string;
   comment: Types.Comment;
-  onChangeComment(e: React.ChangeEvent<HTMLInputElement>, id: string): void;
-  removeComment(e: string): void;
 }
-const Comment: React.FC<CommentProps> = ({
-  userName,
-  comment,
-  onChangeComment,
-  removeComment,
-}) => {
+const Comment: React.FC<CommentProps> = ({ userName, comment }) => {
+  const dispatch = useDispatch();
+
   return (
     <Container>
       <FirstNameLetter>
@@ -24,10 +21,14 @@ const Comment: React.FC<CommentProps> = ({
         <Text
           type="text"
           value={comment.text}
-          onChange={(e) => onChangeComment(e, comment.id)}
+          onChange={(e) =>
+            dispatch(onChangeComment({ text: e.target.value, id: comment.id }))
+          }
         />
         <div>
-          <Delete onClick={() => removeComment(comment.id)}>Удалить</Delete>
+          <Delete onClick={() => dispatch(removeComment(comment.id))}>
+            Удалить
+          </Delete>
         </div>
       </div>
     </Container>

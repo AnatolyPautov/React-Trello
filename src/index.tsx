@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Context from './context';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 function Main() {
   const [userName, setUserName] = React.useState<string>('');
@@ -11,7 +13,9 @@ function Main() {
   return (
     <Context.Provider value={{ userName, setUserName }}>
       <React.StrictMode>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </React.StrictMode>
     </Context.Provider>
   );

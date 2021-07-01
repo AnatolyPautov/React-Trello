@@ -5,30 +5,21 @@ import { ReactSVG } from 'react-svg';
 import closeCross from './../../assets/icons/closeCross.svg';
 import * as Types from '../../types/types';
 import Comment from './../comment/Comment';
+import { useDispatch, useSelector } from 'react-redux';
+import { addComment, updateNewComment, onChangeCard } from '../../store/store';
 
 interface ModalProps {
+  comments: Types.Comment[];
   column: Types.Column;
   card: Types.Card;
-  onChangeCard(
-    id: string,
-    filedName: string
-  ): (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-  ) => void;
   setModalActive(active: boolean): void;
-  comments: Types.Comment[];
-  addComment(commentInput: string): void;
-  onChangeComment(e: React.ChangeEvent<HTMLInputElement>, id: string): void;
-  removeComment(id: string): void;
 }
 const CardModal: React.FC<ModalProps> = (props) => {
-  const [commentInput, setCommentInput] = React.useState<string>('');
-
   const textRef = React.useRef<any>();
 
   const { userName } = React.useContext(Context);
+
+  const dispatch = useDispatch();
 
   const onCloseModal = ({ key }: KeyboardEvent) => {
     if (key === 'Escape') {
@@ -40,17 +31,13 @@ const CardModal: React.FC<ModalProps> = (props) => {
     document.addEventListener('keydown', onCloseModal);
   });
 
-  const onChangeCommentInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCommentInput(e.target.value);
-  };
-
   const keyPressHandler = (
     event: React.KeyboardEvent,
-    commentInput: string
+    newTextComment: string,
+    cardId: string
   ) => {
-    if (event.key === 'Enter') {
-      props.addComment(commentInput);
-      setCommentInput('');
+    if (event.key === 'Enter' && newTextComment) {
+      dispatch(addComment({ newTextComment, cardId }));
     }
   };
 
@@ -64,7 +51,15 @@ const CardModal: React.FC<ModalProps> = (props) => {
             </span>
           </CloseСross>
           <TitleInput
-            onChange={props.onChangeCard(props.card.id, 'title')}
+            onChange={(e) =>
+              dispatch(
+                onChangeCard({
+                  id: props.card.id,
+                  filedName: 'title',
+                  event: e.target.value,
+                })
+              )
+            }
             value={props.card.title}
             type="text"
           />
@@ -76,7 +71,13 @@ const CardModal: React.FC<ModalProps> = (props) => {
           <DescInput
             ref={textRef}
             onChange={(e) => {
-              props.onChangeCard(props.card.id, 'description')(e);
+              dispatch(
+                onChangeCard({
+                  id: props.card.id,
+                  filedName: 'description',
+                  event: e.target.value,
+                })
+              );
               textRef.current.style.height = '0px';
               textRef.current.style.height = `${textRef.current.scrollHeight}px`;
             }}
@@ -84,21 +85,31 @@ const CardModal: React.FC<ModalProps> = (props) => {
             placeholder="Добавте более подробное описание..."
           />
           <CommentArea
-            value={commentInput}
+            value={props.card.newTextComment}
             type="text"
             placeholder="Введите комментарий"
-            onChange={onChangeCommentInput}
-            onKeyPress={(e) => keyPressHandler(e, commentInput)}
+            onChange={(e) =>
+              dispatch(
+                updateNewComment({
+                  newTextComment: e.target.value,
+                  cardId: props.card.id,
+                })
+              )
+            }
+            onKeyPress={(e) =>
+              keyPressHandler(e, props.card.newTextComment, props.card.id)
+            }
           />
-          {props.comments.map((comment: Types.Comment) => (
-            <Comment
-              key={comment.id}
-              onChangeComment={props.onChangeComment}
-              removeComment={props.removeComment}
-              comment={comment}
-              userName={userName}
-            />
-          ))}
+          {props.comments.map(
+            (comment: Types.Comment) =>
+              comment.cardId === props.card.id && (
+                <Comment
+                  key={comment.id}
+                  comment={comment}
+                  userName={userName}
+                />
+              )
+          )}
         </Modal>
       </ModalWrapper>
     </Background>

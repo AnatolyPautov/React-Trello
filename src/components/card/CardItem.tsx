@@ -5,65 +5,32 @@ import { ReactSVG } from 'react-svg';
 import closeCross from './../../assets/icons/closeCross.svg';
 import commentIcon from './../../assets/icons/comment.svg';
 import * as Types from '../../types/types';
+import { removeCard, selectComments } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface CardItemProps {
   column: Types.Column;
   card: Types.Card;
-  removeCard(id: string | number): void;
-  onChangeCard(
-    id: string,
-    filedName: string
-  ): (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-  ) => void;
 }
-const CardItem: React.FC<CardItemProps> = ({
-  column,
-  card,
-  removeCard,
-  onChangeCard,
-}) => {
+const CardItem: React.FC<CardItemProps> = ({ column, card }) => {
   const [modalActive, setModalActive] = React.useState(false);
-  const [comments, setComments] = React.useState<Types.Comment[]>([]);
 
-  const onChangeComment = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    id: string
-  ) => {
-    const changedComments = comments.map((comment) => {
-      if (comment.id === id) return { ...comment, text: e.target.value };
-      return comment;
-    });
-    setComments(changedComments);
-  };
-
-  const addComment = (commentInput: string) => {
-    if (commentInput) {
-      const newComment = {
-        id: Math.random().toString(36).substring(2, 9),
-        text: commentInput,
-      };
-      setComments([...comments, newComment]);
-    }
-  };
-
-  const removeComment = (id: string) => {
-    setComments(comments.filter((comment: Types.Comment) => comment.id !== id));
-  };
-
+  const dispatch = useDispatch();
+  const comments = useSelector(selectComments);
+  const curComments = comments.filter((comment) => {
+    return comment.cardId === card.id;
+  });
   return (
     <>
       <Card onClick={() => setModalActive(true)}>
         <CardDesc>{card.title}</CardDesc>
-        {comments.length > 0 && (
+        {curComments.length > 0 && (
           <IconContainer title="Коментарии">
             <ReactSVG src={commentIcon} />
-            <span>{comments.length}</span>
+            <span>{curComments.length}</span>
           </IconContainer>
         )}
-        <CloseСross onClick={() => removeCard(card.id)}>
+        <CloseСross onClick={() => dispatch(removeCard(card.id))}>
           <span>
             <ReactSVG src={closeCross} />
           </span>
@@ -71,14 +38,10 @@ const CardItem: React.FC<CardItemProps> = ({
       </Card>
       {modalActive && (
         <CardModal
+          comments={comments}
           column={column}
           setModalActive={setModalActive}
           card={card}
-          onChangeCard={onChangeCard}
-          addComment={addComment}
-          comments={comments}
-          onChangeComment={onChangeComment}
-          removeComment={removeComment}
         />
       )}
     </>
