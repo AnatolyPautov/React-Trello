@@ -5,7 +5,8 @@ import { ReactSVG } from 'react-svg';
 import closeCross from './../../assets/icons/closeCross.svg';
 import commentIcon from './../../assets/icons/comment.svg';
 import * as Types from '../../types/types';
-import { removeCard, selectComments } from '../../store/store';
+import { removeCard } from '../../store/trelloSlice';
+import { selectComments } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 
 interface CardItemProps {

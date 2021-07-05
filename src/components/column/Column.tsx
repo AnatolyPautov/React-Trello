@@ -7,8 +7,8 @@ import {
   addCard,
   updateNewCard,
   setColumnTitle,
-  selectCards,
-} from '../../store/store';
+} from '../../store/trelloSlice';
+import { selectCards } from '../../store/store';
 
 interface ColumnProps {
   column: Types.Column;

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import * as Types from '../../types/types';
-import { removeComment, onChangeComment } from '../../store/store';
+import { removeComment, onChangeComment } from '../../store/trelloSlice';
 import { useDispatch } from 'react-redux';
 
 interface CommentProps {

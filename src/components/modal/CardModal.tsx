@@ -6,7 +6,11 @@ import closeCross from './../../assets/icons/closeCross.svg';
 import * as Types from '../../types/types';
 import Comment from './../comment/Comment';
 import { useDispatch, useSelector } from 'react-redux';
-import { addComment, updateNewComment, onChangeCard } from '../../store/store';
+import {
+  addComment,
+  updateNewComment,
+  onChangeCard,
+} from '../../store/trelloSlice';
 
 interface ModalProps {
   comments: Types.Comment[];
