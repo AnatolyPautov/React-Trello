@@ -37,7 +37,9 @@ export const trelloSlice = createSlice({
         description: '',
         columnId: payload.columnId,
         newTextComment: '',
+        author: payload.author,
       };
+      console.log(payload);
       state.cards.push(newCard);
       state.columns[payload.columnId].newTextCard = '';
     },
@@ -62,6 +64,7 @@ export const trelloSlice = createSlice({
         id: Math.random().toString(36).substring(2, 9),
         text: payload.newTextComment,
         cardId: payload.cardId,
+        author: payload.author,
       };
       state.comments.push(newComment);
       state.cards.map((card) => {

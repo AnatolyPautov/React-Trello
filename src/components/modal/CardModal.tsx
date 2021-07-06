@@ -21,9 +21,9 @@ interface ModalProps {
 const CardModal: React.FC<ModalProps> = (props) => {
   const textRef = React.useRef<any>();
 
-  const { userName } = React.useContext(Context);
-
   const dispatch = useDispatch();
+
+  const { userName } = React.useContext(Context);
 
   const onCloseModal = ({ key }: KeyboardEvent) => {
     if (key === 'Escape') {
@@ -41,7 +41,7 @@ const CardModal: React.FC<ModalProps> = (props) => {
     cardId: string
   ) => {
     if (event.key === 'Enter' && newTextComment) {
-      dispatch(addComment({ newTextComment, cardId }));
+      dispatch(addComment({ newTextComment, cardId, author: userName }));
     }
   };
 
@@ -69,7 +69,7 @@ const CardModal: React.FC<ModalProps> = (props) => {
           />
           <TitleDesc>
             <div> в колонке {props.column.title}</div>
-            <div>Автор: {userName}</div>
+            <div>Автор: {props.card.author}</div>
           </TitleDesc>
           Описание:
           <DescInput
@@ -107,11 +107,7 @@ const CardModal: React.FC<ModalProps> = (props) => {
           {props.comments.map(
             (comment: Types.Comment) =>
               comment.cardId === props.card.id && (
-                <Comment
-                  key={comment.id}
-                  comment={comment}
-                  userName={userName}
-                />
+                <Comment key={comment.id} comment={comment} />
               )
           )}
         </Modal>

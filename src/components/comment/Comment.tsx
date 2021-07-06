@@ -3,32 +3,35 @@ import styled from 'styled-components';
 import * as Types from '../../types/types';
 import { removeComment, onChangeComment } from '../../store/trelloSlice';
 import { useDispatch } from 'react-redux';
+import Context from '../../context';
 
 interface CommentProps {
-  userName: string;
   comment: Types.Comment;
 }
-const Comment: React.FC<CommentProps> = ({ userName, comment }) => {
+const Comment: React.FC<CommentProps> = ({ comment }) => {
   const dispatch = useDispatch();
 
+  const { userName } = React.useContext(Context);
+
+  const changeComment = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (userName === comment.author || userName === 'admin') {
+      dispatch(onChangeComment({ text: e.target.value, id: comment.id }));
+    }
+  };
   return (
     <Container>
       <FirstNameLetter>
-        <div>{userName[0]}</div>
+        <div>{comment.author[0]}</div>
       </FirstNameLetter>
       <div>
-        <div>{userName}</div>
-        <Text
-          type="text"
-          value={comment.text}
-          onChange={(e) =>
-            dispatch(onChangeComment({ text: e.target.value, id: comment.id }))
-          }
-        />
+        <div>{comment.author}</div>
+        <Text type="text" value={comment.text} onChange={changeComment} />
         <div>
-          <Delete onClick={() => dispatch(removeComment(comment.id))}>
-            Удалить
-          </Delete>
+          {(userName === comment.author || userName === 'admin') && (
+            <Delete onClick={() => dispatch(removeComment(comment.id))}>
+              Удалить
+            </Delete>
+          )}
         </div>
       </div>
     </Container>

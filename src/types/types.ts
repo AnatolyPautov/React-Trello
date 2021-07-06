@@ -9,9 +9,11 @@ export type Card = {
   description: string;
   columnId: number;
   newTextComment: string;
+  author: string;
 };
 export type Comment = {
   id: string;
   text: string;
   cardId: string;
+  author: string;
 };

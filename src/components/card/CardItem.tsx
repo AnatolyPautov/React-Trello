@@ -8,6 +8,7 @@ import * as Types from '../../types/types';
 import { removeCard } from '../../store/trelloSlice';
 import { selectComments } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
+import Context from '../../context';
 
 interface CardItemProps {
   column: Types.Column;
@@ -17,6 +18,9 @@ const CardItem: React.FC<CardItemProps> = ({ column, card }) => {
   const [modalActive, setModalActive] = React.useState(false);
 
   const dispatch = useDispatch();
+
+  const { userName } = React.useContext(Context);
+
   const comments = useSelector(selectComments);
   const curComments = comments.filter((comment) => {
     return comment.cardId === card.id;
@@ -31,11 +35,13 @@ const CardItem: React.FC<CardItemProps> = ({ column, card }) => {
             <span>{curComments.length}</span>
           </IconContainer>
         )}
-        <CloseСross onClick={() => dispatch(removeCard(card.id))}>
-          <span>
-            <ReactSVG src={closeCross} />
-          </span>
-        </CloseСross>
+        {(userName === card.author || userName === 'admin') && (
+          <CloseСross onClick={() => dispatch(removeCard(card.id))}>
+            <span>
+              <ReactSVG src={closeCross} />
+            </span>
+          </CloseСross>
+        )}
       </Card>
       {modalActive && (
         <CardModal
@@ -56,6 +62,7 @@ const Card = styled.div`
   margin-bottom: 5px;
   border-radius: 3px;
   box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
+  min-height: 31px;
   &: hover {
     background-color: rgba(255, 255, 255, 0.3);
   }

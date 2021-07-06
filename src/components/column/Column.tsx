@@ -9,6 +9,7 @@ import {
   setColumnTitle,
 } from '../../store/trelloSlice';
 import { selectCards } from '../../store/store';
+import Context from '../../context';
 
 interface ColumnProps {
   column: Types.Column;
@@ -18,12 +19,15 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
   const cards = useSelector(selectCards);
   const dispatch = useDispatch();
 
+  const { userName } = React.useContext(Context);
+
   const keyPressHandler = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && column.newTextCard) {
       dispatch(
         addCard({
           newTextCard: column.newTextCard,
           columnId: column.id,
+          author: userName,
         })
       );
     }
@@ -63,6 +67,7 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
                   addCard({
                     newTextCard: column.newTextCard,
                     columnId: column.id,
+                    author: userName,
                   })
                 )
             : undefined
