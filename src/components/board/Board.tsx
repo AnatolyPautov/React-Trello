@@ -2,14 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import Column from '../column/Column';
 import { useSelector } from 'react-redux';
-import { selectColumns } from '../../store/store';
+import { getColumns } from '../../store/store';
 import Context from '../../context';
 
 interface BoardProps {
   setJoined(e: boolean): void;
 }
 const Board: React.FC<BoardProps> = ({ setJoined }) => {
-  const columns = useSelector(selectColumns);
+  const columns = useSelector(getColumns);
 
   const { userName } = React.useContext(Context);
 
@@ -30,14 +30,13 @@ const Board: React.FC<BoardProps> = ({ setJoined }) => {
 
 const BoardContainer = styled.div`
   display: flex;
-  gap: 20px;
   align-items: flex-start;
   margin-top: 50px;
 `;
 const Profile = styled.div`
   box-sizing: border-box;
   background-color: #ebecf0;
-  margin: 30px 0 0 auto;
+  margin: 30px 3px 0 auto;
   width: 200px;
   height: 50px;
   display: flex;

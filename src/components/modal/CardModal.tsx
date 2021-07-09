@@ -72,7 +72,7 @@ const CardModal: React.FC<ModalProps> = (props) => {
             <div>Автор: {props.card.author}</div>
           </TitleDesc>
           Описание:
-          <DescInput
+          <DescTextArea
             ref={textRef}
             onChange={(e) => {
               dispatch(
@@ -104,12 +104,15 @@ const CardModal: React.FC<ModalProps> = (props) => {
               keyPressHandler(e, props.card.newTextComment, props.card.id)
             }
           />
-          {props.comments.map(
-            (comment: Types.Comment) =>
-              comment.cardId === props.card.id && (
-                <Comment key={comment.id} comment={comment} />
-              )
-          )}
+          {props.comments
+            .slice(0)
+            .reverse()
+            .map(
+              (comment: Types.Comment) =>
+                comment.cardId === props.card.id && (
+                  <Comment key={comment.id} comment={comment} />
+                )
+            )}
         </Modal>
       </ModalWrapper>
     </Background>
@@ -193,11 +196,10 @@ const TitleDesc = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-const DescInput = styled.textarea`
+const DescTextArea = styled.textarea`
   background-color: rgba(9, 30, 66, 0.08);
   margin: 10px 0;
   font-size: 14px;
-  min-height: 50px;
   resize: none;
   border: 2px solid transparent;
   outline: none;

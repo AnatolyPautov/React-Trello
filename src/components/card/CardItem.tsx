@@ -6,7 +6,7 @@ import closeCross from './../../assets/icons/closeCross.svg';
 import commentIcon from './../../assets/icons/comment.svg';
 import * as Types from '../../types/types';
 import { removeCard } from '../../store/trelloSlice';
-import { selectComments } from '../../store/store';
+import { getComments } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import Context from '../../context';
 
@@ -21,7 +21,7 @@ const CardItem: React.FC<CardItemProps> = ({ column, card }) => {
 
   const { userName } = React.useContext(Context);
 
-  const comments = useSelector(selectComments);
+  const comments = useSelector(getComments);
   const curComments = comments.filter((comment) => {
     return comment.cardId === card.id;
   });
@@ -59,6 +59,7 @@ const Card = styled.div`
   cursor: pointer;
   position: relative;
   background-color: white;
+  padding-right: 30px;
   margin-bottom: 5px;
   border-radius: 3px;
   box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
@@ -78,9 +79,12 @@ const CloseСross = styled.div`
   top: 0;
   right: 0;
   width: 10px;
-  height: 10px;
+  height: 21px;
   cursor: pointer;
   padding: 5px 10px;
+  &: hover {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
 `;
 const IconContainer = styled.div`
   padding: 0 10px;

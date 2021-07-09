@@ -16,8 +16,8 @@ const store = configureStore({
 
 type RootState = ReturnType<typeof store.getState>;
 
-export const selectColumns = (state: RootState) => state.columns;
-export const selectCards = (state: RootState) => state.cards;
-export const selectComments = (state: RootState) => state.comments;
+export const getColumns = (state: RootState) => state.columns;
+export const getCards = (state: RootState) => state.cards;
+export const getComments = (state: RootState) => state.comments;
 
 export default store;

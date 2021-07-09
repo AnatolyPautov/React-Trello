@@ -39,7 +39,6 @@ export const trelloSlice = createSlice({
         newTextComment: '',
         author: payload.author,
       };
-      console.log(payload);
       state.cards.push(newCard);
       state.columns[payload.columnId].newTextCard = '';
     },
