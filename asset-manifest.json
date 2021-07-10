@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/React-Trello/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/React-Trello/static/js/main.3e1e91df.chunk.js",
+    "main.js.map": "/React-Trello/static/js/main.3e1e91df.chunk.js.map",
+    "runtime-main.js": "/React-Trello/static/js/runtime-main.38bfeb49.js",
+    "runtime-main.js.map": "/React-Trello/static/js/runtime-main.38bfeb49.js.map",
+    "static/js/2.1f10a329.chunk.js": "/React-Trello/static/js/2.1f10a329.chunk.js",
+    "static/js/2.1f10a329.chunk.js.map": "/React-Trello/static/js/2.1f10a329.chunk.js.map",
+    "static/js/3.88fc602b.chunk.js": "/React-Trello/static/js/3.88fc602b.chunk.js",
+    "static/js/3.88fc602b.chunk.js.map": "/React-Trello/static/js/3.88fc602b.chunk.js.map",
+    "index.html": "/React-Trello/index.html",
+    "static/css/main.6dea0f05.chunk.css.map": "/React-Trello/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.1f10a329.chunk.js.LICENSE.txt": "/React-Trello/static/js/2.1f10a329.chunk.js.LICENSE.txt",
+    "static/media/closeCross.64f313cb.svg": "/React-Trello/static/media/closeCross.64f313cb.svg",
+    "static/media/comment.ecf121af.svg": "/React-Trello/static/media/comment.ecf121af.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.38bfeb49.js",
+    "static/js/2.1f10a329.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.3e1e91df.chunk.js"
+  ]
+}
