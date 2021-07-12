@@ -17,3 +17,6 @@ export type Comment = {
   cardId: string;
   author: string;
 };
+export type UserName = {
+  firstName: string;
+};

@@ -1,36 +1,50 @@
 import React from 'react';
 import styled from 'styled-components';
-import ThemeContext from '../../context';
+import Context from '../../context';
+import { Form, Field } from 'react-final-form';
+import * as Types from '../../types/types';
 
 interface PopupNameProps {
   setJoined(e: boolean): void;
 }
 
 const PopupName: React.FC<PopupNameProps> = ({ setJoined }) => {
-  const [name, setName] = React.useState<string>('');
+  const { setUserName } = React.useContext(Context);
 
-  const { setUserName } = React.useContext(ThemeContext);
-
-  const onAddName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  const onSaveName = () => {
-    if (name) {
-      setUserName(name);
+  const onSubmit = (values: Types.UserName) => {
+    if (values) {
+      setUserName(values.firstName);
       setJoined(true);
     }
   };
 
+  const required = (value: string) => (value ? undefined : 'Введите имя');
+
   return (
-    <PopupContainer>
-      <PopupInput type="text" placeholder="Введите имя" onChange={onAddName} />
-      <PopupBtn onClick={onSaveName}>Сохранить</PopupBtn>
-    </PopupContainer>
+    <Form
+      onSubmit={onSubmit}
+      render={({ handleSubmit }) => (
+        <PopupForm onSubmit={handleSubmit}>
+          <PopupInput>
+            <Field
+              name="firstName"
+              validate={required}
+              render={({ input, meta }) => (
+                <div>
+                  <input {...input} type="text" placeholder="Введите имя" />
+                  {meta.error && meta.touched && <Error>{meta.error}</Error>}
+                </div>
+              )}
+            />
+          </PopupInput>
+          <PopupBtn type="submit">Сохранить</PopupBtn>
+        </PopupForm>
+      )}
+    />
   );
 };
 
-const PopupContainer = styled.div`
+const PopupForm = styled.form`
   position: absolute;
   content: '';
   top: 20%;
@@ -43,16 +57,19 @@ const PopupContainer = styled.div`
   flex-direction: column;
   border-radius: 5px;
 `;
-const PopupInput = styled.input`
+const PopupInput = styled.div`
   margin: 50px auto 30px;
-  width: 250px;
-  padding: 12px 0;
-  border: none;
-  outline: none;
-  border-radius: 3px;
-  font-size: 20px;
-  text-align: center;
-  border: 2px solid #5c3bfe;
+  position: relative;
+  input {
+    text-align: center;
+    width: 250px;
+    padding: 12px 0;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+    font-size: 20px;
+    border: 2px solid #5c3bfe;
+  }
 `;
 const PopupBtn = styled.button`
   margin: 10px auto 0;
@@ -72,4 +89,12 @@ const PopupBtn = styled.button`
   }
 `;
 
+const Error = styled.div`
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  color: red;
+`;
 export default PopupName;
