@@ -1,5 +1,5 @@
 import React from 'react';
-import PopupName from './components/popupUserName/PopupName';
+import Login from './components/login/Login';
 import Board from './components/board/Board';
 import styled from 'styled-components';
 import GlobalStyle from './globalstyles';
@@ -10,26 +10,17 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <Background>
-        <Wrapper>
-          {!joined ? <PopupName setJoined={setJoined} /> : <Board />}
-        </Wrapper>
-      </Background>
+      <Wrapper>
+        {!joined ? (
+          <Login setJoined={setJoined} />
+        ) : (
+          <Board setJoined={setJoined} />
+        )}
+      </Wrapper>
     </>
   );
 }
 
-const Background = styled.div`
-  position: absolute;
-  content: '';
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  algin-items: center;
-`;
 const Wrapper = styled.div`
   width: 1300px;
   margin: 0 auto;

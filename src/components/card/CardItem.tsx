@@ -5,80 +5,50 @@ import { ReactSVG } from 'react-svg';
 import closeCross from './../../assets/icons/closeCross.svg';
 import commentIcon from './../../assets/icons/comment.svg';
 import * as Types from '../../types/types';
+import { removeCard } from '../../store/trelloSlice';
+import { getComments } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import Context from '../../context';
 
 interface CardItemProps {
   column: Types.Column;
   card: Types.Card;
-  removeCard(id: string | number): void;
-  onChangeCard(
-    id: string,
-    filedName: string
-  ): (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-  ) => void;
 }
-const CardItem: React.FC<CardItemProps> = ({
-  column,
-  card,
-  removeCard,
-  onChangeCard,
-}) => {
+const CardItem: React.FC<CardItemProps> = ({ column, card }) => {
   const [modalActive, setModalActive] = React.useState(false);
-  const [comments, setComments] = React.useState<Types.Comment[]>([]);
 
-  const onChangeComment = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    id: string
-  ) => {
-    const changedComments = comments.map((comment) => {
-      if (comment.id === id) return { ...comment, text: e.target.value };
-      return comment;
-    });
-    setComments(changedComments);
-  };
+  const dispatch = useDispatch();
 
-  const addComment = (commentInput: string) => {
-    if (commentInput) {
-      const newComment = {
-        id: Math.random().toString(36).substring(2, 9),
-        text: commentInput,
-      };
-      setComments([...comments, newComment]);
-    }
-  };
+  const { userName } = React.useContext(Context);
 
-  const removeComment = (id: string) => {
-    setComments(comments.filter((comment: Types.Comment) => comment.id !== id));
-  };
-
+  const comments = useSelector(getComments);
+  const curComments = comments.filter((comment) => {
+    return comment.cardId === card.id;
+  });
   return (
     <>
       <Card onClick={() => setModalActive(true)}>
         <CardDesc>{card.title}</CardDesc>
-        {comments.length > 0 && (
+        {curComments.length > 0 && (
           <IconContainer title="Коментарии">
             <ReactSVG src={commentIcon} />
-            <span>{comments.length}</span>
+            <span>{curComments.length}</span>
           </IconContainer>
         )}
-        <CloseСross onClick={() => removeCard(card.id)}>
-          <span>
-            <ReactSVG src={closeCross} />
-          </span>
-        </CloseСross>
+        {(userName === card.author || userName === 'admin') && (
+          <CloseСross onClick={() => dispatch(removeCard(card.id))}>
+            <span>
+              <ReactSVG src={closeCross} />
+            </span>
+          </CloseСross>
+        )}
       </Card>
       {modalActive && (
         <CardModal
+          comments={comments}
           column={column}
           setModalActive={setModalActive}
           card={card}
-          onChangeCard={onChangeCard}
-          addComment={addComment}
-          comments={comments}
-          onChangeComment={onChangeComment}
-          removeComment={removeComment}
         />
       )}
     </>
@@ -89,9 +59,11 @@ const Card = styled.div`
   cursor: pointer;
   position: relative;
   background-color: white;
+  padding-right: 30px;
   margin-bottom: 5px;
   border-radius: 3px;
   box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
+  min-height: 31px;
   &: hover {
     background-color: rgba(255, 255, 255, 0.3);
   }
@@ -107,9 +79,12 @@ const CloseСross = styled.div`
   top: 0;
   right: 0;
   width: 10px;
-  height: 10px;
+  height: 21px;
   cursor: pointer;
   padding: 5px 10px;
+  &: hover {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
 `;
 const IconContainer = styled.div`
   padding: 0 10px;

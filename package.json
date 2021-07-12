@@ -2,7 +2,9 @@
   "name": "trello-react",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://anatolypautov.github.io/React-Trello/",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.6.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -10,10 +12,15 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.0",
+    "final-form": "^4.20.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-final-form": "^6.5.3",
+    "react-redux": "^7.2.4",
     "react-scripts": "4.0.3",
     "react-svg": "^14.0.2",
+    "redux": "^4.1.0",
+    "redux-persist": "^6.0.0",
     "styled-components": "^5.3.0",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
@@ -22,7 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build"
   },
   "browserslist": {
     "production": [
@@ -37,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@types/redux-persist": "^4.3.1",
     "@types/styled-components": "^5.1.10"
   }
 }
