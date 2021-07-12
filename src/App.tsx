@@ -1,5 +1,5 @@
 import React from 'react';
-import PopupName from './components/popupUserName/PopupName';
+import Login from './components/login/Login';
 import Board from './components/board/Board';
 import styled from 'styled-components';
 import GlobalStyle from './globalstyles';
@@ -12,7 +12,7 @@ function App() {
       <GlobalStyle />
       <Wrapper>
         {!joined ? (
-          <PopupName setJoined={setJoined} />
+          <Login setJoined={setJoined} />
         ) : (
           <Board setJoined={setJoined} />
         )}

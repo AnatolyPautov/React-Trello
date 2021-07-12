@@ -4,11 +4,11 @@ import Context from '../../context';
 import { Form, Field } from 'react-final-form';
 import * as Types from '../../types/types';
 
-interface PopupNameProps {
+interface LoginProps {
   setJoined(e: boolean): void;
 }
 
-const PopupName: React.FC<PopupNameProps> = ({ setJoined }) => {
+const Login: React.FC<LoginProps> = ({ setJoined }) => {
   const { setUserName } = React.useContext(Context);
 
   const onSubmit = (values: Types.UserName) => {
@@ -97,4 +97,4 @@ const Error = styled.div`
   height: 30px;
   color: red;
 `;
-export default PopupName;
+export default Login;
