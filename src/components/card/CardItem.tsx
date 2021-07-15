@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import CardModal from '../modal/CardModal';
+import CardModal from '../modal';
 import { ReactSVG } from 'react-svg';
 import closeCross from './../../assets/icons/closeCross.svg';
 import commentIcon from './../../assets/icons/comment.svg';
@@ -64,7 +64,7 @@ const Card = styled.div`
   border-radius: 3px;
   box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
   min-height: 31px;
-  &: hover {
+  &:hover {
     background-color: rgba(255, 255, 255, 0.3);
   }
 `;
@@ -82,7 +82,7 @@ const CloseСross = styled.div`
   height: 21px;
   cursor: pointer;
   padding: 5px 10px;
-  &: hover {
+  &:hover {
     background-color: rgba(0, 0, 0, 0.15);
   }
 `;

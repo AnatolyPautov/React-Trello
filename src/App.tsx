@@ -1,6 +1,6 @@
 import React from 'react';
-import Login from './components/login/Login';
-import Board from './components/board/Board';
+import Login from './components/login';
+import Board from './components/board';
 import styled from 'styled-components';
 import GlobalStyle from './globalstyles';
 

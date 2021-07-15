@@ -2,14 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { ReactSVG } from 'react-svg';
 import closeCross from './../../assets/icons/closeCross.svg';
-import CardItem from '../card/CardItem';
+import CardItem from '../card';
 import * as Types from '../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  addCard,
-  updateNewCard,
-  setColumnTitle,
-} from '../../store/trelloSlice';
+import { addCard, updateColumnTitle } from '../../store/trelloSlice';
 import { getCards } from '../../store/store';
 import Context from '../../context';
 
@@ -19,6 +15,7 @@ interface ColumnProps {
 
 const Column: React.FC<ColumnProps> = ({ column }) => {
   const [areaInputActive, setAreaInputActive] = React.useState<boolean>(false);
+  const [newTextCard, setNewTextCard] = React.useState<string>('');
 
   const cards = useSelector(getCards);
   const dispatch = useDispatch();
@@ -26,14 +23,15 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
   const { userName } = React.useContext(Context);
 
   const keyPressHandler = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' && column.newTextCard) {
+    if (event.key === 'Enter' && newTextCard) {
       dispatch(
         addCard({
-          newTextCard: column.newTextCard,
+          newTextCard: newTextCard,
           columnId: column.id,
           author: userName,
         })
       );
+      setNewTextCard('');
     }
   };
 
@@ -43,7 +41,7 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
         value={column.title}
         type="text"
         onChange={(e) =>
-          dispatch(setColumnTitle({ event: e.target.value, id: column.id }))
+          dispatch(updateColumnTitle({ event: e.target.value, id: column.id }))
         }
       />
       <CardsWrapper>
@@ -61,26 +59,26 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
       ) : (
         <div>
           <AreaInput
-            value={column.newTextCard}
+            value={newTextCard}
             type="text"
             placeholder="Введите текст"
-            onChange={(e) =>
-              dispatch(updateNewCard({ event: e.target.value, id: column.id }))
-            }
+            onChange={(e) => setNewTextCard(e.target.value)}
             onKeyPress={keyPressHandler}
           />
           <ButtonContainer>
             <ButtonActive
               onClick={
-                column.newTextCard
-                  ? () =>
+                newTextCard
+                  ? () => {
                       dispatch(
                         addCard({
-                          newTextCard: column.newTextCard,
+                          newTextCard: newTextCard,
                           columnId: column.id,
                           author: userName,
                         })
-                      )
+                      );
+                      setNewTextCard('');
+                    }
                   : undefined
               }
             >
