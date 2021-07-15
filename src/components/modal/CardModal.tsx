@@ -4,13 +4,9 @@ import Context from '../../context';
 import { ReactSVG } from 'react-svg';
 import closeCross from './../../assets/icons/closeCross.svg';
 import * as Types from '../../types/types';
-import Comment from './../comment/Comment';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  addComment,
-  updateNewComment,
-  onChangeCard,
-} from '../../store/trelloSlice';
+import Comment from './../comment';
+import { useDispatch } from 'react-redux';
+import { addComment, onChangeCard } from '../../store/trelloSlice';
 
 interface ModalProps {
   comments: Types.Comment[];
@@ -19,6 +15,8 @@ interface ModalProps {
   setModalActive(active: boolean): void;
 }
 const CardModal: React.FC<ModalProps> = (props) => {
+  const [newComment, setNewComment] = React.useState<string>('');
+
   const textRef = React.useRef<any>();
 
   const dispatch = useDispatch();
@@ -35,13 +33,10 @@ const CardModal: React.FC<ModalProps> = (props) => {
     document.addEventListener('keydown', onCloseModal);
   });
 
-  const keyPressHandler = (
-    event: React.KeyboardEvent,
-    newTextComment: string,
-    cardId: string
-  ) => {
-    if (event.key === 'Enter' && newTextComment) {
-      dispatch(addComment({ newTextComment, cardId, author: userName }));
+  const keyPressHandler = (event: React.KeyboardEvent, cardId: string) => {
+    if (event.key === 'Enter' && newComment) {
+      dispatch(addComment({ newComment, cardId, author: userName }));
+      setNewComment('');
     }
   };
 
@@ -86,23 +81,14 @@ const CardModal: React.FC<ModalProps> = (props) => {
               textRef.current.style.height = `${textRef.current.scrollHeight}px`;
             }}
             value={props.card.description}
-            placeholder="Добавте более подробное описание..."
+            placeholder="Добавьте более подробное описание..."
           />
           <CommentArea
-            value={props.card.newTextComment}
+            value={newComment}
             type="text"
             placeholder="Введите комментарий"
-            onChange={(e) =>
-              dispatch(
-                updateNewComment({
-                  newTextComment: e.target.value,
-                  cardId: props.card.id,
-                })
-              )
-            }
-            onKeyPress={(e) =>
-              keyPressHandler(e, props.card.newTextComment, props.card.id)
-            }
+            onChange={(e) => setNewComment(e.target.value)}
+            onKeyPress={(e) => keyPressHandler(e, props.card.id)}
           />
           {props.comments
             .slice(0)
@@ -205,7 +191,7 @@ const DescTextArea = styled.textarea`
   outline: none;
   border-radius: 3px;
   padding: 5px 10px;
-  &: focus {
+  &:focus {
     border: 2px solid #5c3bfe;
     background: white;
   }

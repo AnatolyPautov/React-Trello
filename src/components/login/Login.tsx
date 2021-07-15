@@ -84,7 +84,7 @@ const PopupBtn = styled.button`
   background-color: #5c3bfe;
   color: white;
   transition: 0.3s;
-  &: hover {
+  &:hover {
     background-color: #2a4ab3;
   }
 `;

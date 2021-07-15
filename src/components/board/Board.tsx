@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Column from '../column/Column';
+import Column from '../column';
 import { useSelector } from 'react-redux';
 import { getColumns } from '../../store/store';
 import Context from '../../context';
