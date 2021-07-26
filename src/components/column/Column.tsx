@@ -41,7 +41,7 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
         value={column.title}
         type="text"
         onChange={(e) =>
-          dispatch(updateColumnTitle({ event: e.target.value, id: column.id }))
+          dispatch(updateColumnTitle({ title: e.target.value, id: column.id }))
         }
       />
       <CardsWrapper>

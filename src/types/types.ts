@@ -18,3 +18,22 @@ export type Comment = {
 export type UserName = {
   firstName: string;
 };
+export type NewCard = {
+  newTextCard: string;
+  columnId: number;
+  author: string;
+};
+export type ChangedCard = {
+  id: string;
+  filedName: string;
+  event: string;
+};
+export type NewComment = {
+  newComment: string;
+  cardId: string;
+  author: string;
+};
+export type ChangedComments = {
+  id: string;
+  text: string;
+};
