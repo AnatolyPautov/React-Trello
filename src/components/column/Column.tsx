@@ -4,9 +4,9 @@ import { ReactSVG } from 'react-svg';
 import closeCross from './../../assets/icons/closeCross.svg';
 import CardItem from '../card';
 import * as Types from '../../types/types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { addCard, updateColumnTitle } from '../../store/trelloSlice';
-import { getCards } from '../../store/store';
+import { getCards, useAppDispatch } from '../../store/store';
 import Context from '../../context';
 
 interface ColumnProps {
@@ -18,7 +18,7 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
   const [newTextCard, setNewTextCard] = React.useState<string>('');
 
   const cards = useSelector(getCards);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { userName } = React.useContext(Context);
 

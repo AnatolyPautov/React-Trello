@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import * as Types from '../../types/types';
 import { removeComment, onChangeComment } from '../../store/trelloSlice';
-import { useDispatch } from 'react-redux';
 import Context from '../../context';
+import { useAppDispatch } from '../../store/store';
 
 interface CommentProps {
   comment: Types.Comment;
@@ -13,7 +13,7 @@ const Comment: React.FC<CommentProps> = ({ comment }) => {
 
   const textRef = React.useRef<any>();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { userName } = React.useContext(Context);
 

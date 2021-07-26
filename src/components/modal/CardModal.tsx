@@ -5,8 +5,8 @@ import { ReactSVG } from 'react-svg';
 import closeCross from './../../assets/icons/closeCross.svg';
 import * as Types from '../../types/types';
 import Comment from './../comment';
-import { useDispatch } from 'react-redux';
 import { addComment, onChangeCard } from '../../store/trelloSlice';
+import { useAppDispatch } from '../../store/store';
 
 interface ModalProps {
   comments: Types.Comment[];
@@ -19,7 +19,7 @@ const CardModal: React.FC<ModalProps> = (props) => {
 
   const textRef = React.useRef<any>();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { userName } = React.useContext(Context);
 

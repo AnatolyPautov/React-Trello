@@ -6,8 +6,8 @@ import closeCross from './../../assets/icons/closeCross.svg';
 import commentIcon from './../../assets/icons/comment.svg';
 import * as Types from '../../types/types';
 import { removeCard } from '../../store/trelloSlice';
-import { getComments } from '../../store/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { getComments, useAppDispatch } from '../../store/store';
+import { useSelector } from 'react-redux';
 import Context from '../../context';
 
 interface CardItemProps {
@@ -17,7 +17,7 @@ interface CardItemProps {
 const CardItem: React.FC<CardItemProps> = ({ column, card }) => {
   const [modalActive, setModalActive] = React.useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { userName } = React.useContext(Context);
 
